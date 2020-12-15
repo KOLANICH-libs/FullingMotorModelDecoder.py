@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=61.2.0", "setuptools_scm[toml]>=3.4.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "FullingMotorModelDecoder"
+readme = "ReadMe.md"
+description = "Decodes part/model namebers of Changzhou Fulling Motor Co. motors."
+authors = [{name = "KOLANICH"}]
+classifiers = [
+	"Development Status :: 4 - Beta",
+	"Environment :: Other Environment",
+	"Intended Audience :: Developers",
+	"License :: Public Domain",
+	"Operating System :: OS Independent",
+	"Programming Language :: Python",
+	"Programming Language :: Python :: 3",
+	"Programming Language :: Python :: 3 :: Only",
+	"Topic :: Software Development :: Libraries :: Python Modules",
+]
+keywords = ["FullingMotorModelDecoder"]
+license = {text = "Unlicense"}
+requires-python = ">=3.4"
+dynamic = ["version"]
+
+dependencies = [
+	"antlr4", # https://github.com/antlr/antlr4/tree/master/runtime/Python3,
+	"UniGrammarRuntime"
+]
+
+[project.optional-dependencies]
+test = [
+	"parameterized", # @ git+https://github.com/wolever/parameterized.git
+]
+
+[project.urls]
+Homepage = "https://codeberg.org/KFmts/FullingMotorModelDecoder.py"
+Motors dataset = "https://csvbase.com/KOLANICH/FullingMotors-motors"
+
+[tool.setuptools]
+zip-safe = true
+
+[tool.setuptools.packages.find]
+include = ["FullingMotorModelDecoder", "FullingMotorModelDecoder.*"]
+
+[tool.setuptools_scm]

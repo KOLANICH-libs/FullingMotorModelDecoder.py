@@ -1,0 +1,105 @@
+{
+	"main": {
+		"two_or_three_digit_number": "size",
+		"type_specific": "typed"
+	},
+	"gearbox_specifier": {
+		"float_number": "ratio"
+	},
+	"type_specific": {
+		"stepper_t": "stepper",
+		"permanent_t": "permanent",
+		"brushless_t": "brushless",
+		"three_phase_t": "three_phase"
+	},
+	"three_phase_t": {
+		"three_phase_marker": "type_marker",
+		"two_or_three_digit_number": "motor_body_length",
+		"three_phase_suffix_opt_our": "suffix"
+	},
+	"three_phase_suffix_t": {
+		"two_digit_number": "leads",
+		"shafts_count_marker_opt_our": "shafts_count"
+	},
+	"stepper_suffix_t": {
+		"suffix_with_or_without_tail": "suffix_body"
+	},
+	"suffix_with_or_without_tail": {
+		"suffix_with_current": "with_current",
+		"stepper_suffix_tail": "without_current"
+	},
+	"suffix_with_current": {
+		"three_digit_number": "current",
+		"stepper_suffix_tail": "tail"
+	},
+	"shafts_count_and_step_rate_any_order_1_t": {
+		"shafts_count_marker_opt_our": "shafts_count",
+		"double_step_rate_marker": "step_rate"
+	},
+	"shafts_count_and_step_rate_any_order_2_t": {
+		"double_step_rate_marker": "step_rate",
+		"shafts_count_marker_opt_our": "shafts_count"
+	},
+	"shafts_count_and_step_rate_any_order_t": {
+		"shafts_count_and_step_rate_any_order_1_t": "shafts_count_and_step_rate_any_order_1",
+		"shafts_count_and_step_rate_any_order_2_t": "shafts_count_and_step_rate_any_order_2"
+	},
+	"stepper_suffix_tail": {
+		"digit": "variant",
+		"shafts_count_and_step_rate_any_order_t": "shafts_count_and_step_rate_any_order",
+		"encoder_presence_marker": "encoder",
+		"unknown_marker_F": "unknown_F",
+		"keyway_marker": "key_way",
+		"screwed_shaft_marker": "screwed_shaft",
+		"gearbox_specifier_opt_our": "gearbox",
+		"hollow_specifier_opt_our": "hollow"
+	},
+	"stepper_t": {
+		"stepper_marker": "type_marker",
+		"stepper_modifiers_opt_our": "stepper_modifiers",
+		"two_or_three_digit_number": "motor_body_length",
+		"stepper_suffix_t": "suffix"
+	},
+	"stepper_marker": {
+		"stepper_series_opt_our": "series"
+	},
+	"permanent_t": {
+		"permanent_marker": "type_marker",
+		"two_digit_number": "motor_body_length",
+		"stepper_suffix_t": "suffix"
+	},
+	"brushless_marker": {
+		"price_performance_or_unknown_C_marker": "is_unknown_C",
+		"rounded_marker": "is_round",
+		"brushless_flat_marker": "is_flat",
+		"square_marker": "is_square"
+	},
+	"execution_configuration_t": {
+		"any_integer": "number",
+		"electrical_unit": "unit"
+	},
+	"brushless_modifier_variants": {
+		"brushless_modifier_poles_torque": "poles_torque",
+		"brushless_modifier_length_electronics_electrics": "length_electronics_electrics"
+	},
+	"brushless_modifier_poles_torque": {
+		"brushless_modifier_poles_torque_letter": "poles_or_other",
+		"two_digit_number": "variant"
+	},
+	"brushless_modifier_length_electronics_electrics": {
+		"two_or_three_digit_number": "motor_body_length",
+		"brushless_tail_opt_our": "tail"
+	},
+	"brushless_t": {
+		"brushless_marker": "type_marker",
+		"brushless_modifier_variants": "modifier"
+	},
+	"brushless_tail": {
+		"brushless_electronic_tail": "electronic",
+		"execution_configuration_t": "no_electronic"
+	},
+	"brushless_electronic_tail": {
+		"integrated_electronic_marker": "has_electronics",
+		"execution_configuration_opt_our": "cfg"
+	}
+}

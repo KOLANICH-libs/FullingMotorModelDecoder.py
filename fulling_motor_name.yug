@@ -1,0 +1,436 @@
+meta:
+  id: fulling_motor_name
+  title: Changzhou Fulling Motor Co., Ltd. model nameber
+  license: Unlicense
+  class: regular
+doc: A grammar for parsing Changzhou Fulling Motor Co., Ltd. model namebers
+
+chars:
+  - id: Three
+    lit: "3"
+  - id: RestOfDigits
+    alt:
+      - range: ["0", "2"]
+      - range: ["4", "9"]
+  - id: Dash
+    alt:
+      - lit: '-'
+      - lit: '–'
+  - id: dot
+    lit: "."
+  - id: A
+    lit: A
+  - id: B
+    lit: B
+  - id: C
+    lit: C
+  - id: E
+    lit: E
+  - id: F
+    lit: F
+  - id: G
+    lit: G
+  - id: H
+    lit: H
+  - id: I
+    lit: I
+  - id: K
+    lit: K
+  - id: L
+    lit: L
+  - id: M
+    lit: M
+  - id: P
+    lit: P
+  - id: R
+    lit: R
+  - id: S
+    lit: S
+  - id: T
+    lit: T
+  - id: V
+    lit: V
+  - id: W
+    lit: W
+
+tokens:
+  - id: fl
+    seq:
+      - ref: F
+      - ref: L
+  - id: permanent_marker
+    seq:
+      - ref: P
+      - ref: M
+  - id: brushless_marker_base
+    seq:
+      - ref: B
+      - ref: L
+
+  - id: rounded_marker
+    opt:
+      ref: R
+
+  - id: brushless_flat_marker
+    opt:
+      ref: W
+
+
+fragmented:
+  - id: digit
+    alt:
+      - ref: RestOfDigits
+      - ref: Three
+
+  - id: square_marker
+    opt:
+      ref: S
+
+  - id: stepper_series
+    alt:
+      - cap: standard
+        ref: T
+      - cap: hybrid
+        ref: H
+
+  - id: stepper_modifiers_t
+    cap: stepper_modifiers
+    alt:
+      - ref: H # high_torque
+      - ref: C # hyper_torque (a.k.a hyper_step, but the docs says that it's just torque higher than high-torque)
+
+  - id: price_performance_or_unknown_C_marker
+    opt:
+      ref: C
+
+  - id: electrical_unit
+    alt:
+      - ref: A
+      - ref: V
+
+  - id: shafts_count_marker
+    alt:
+      - ref: A
+      - ref: B
+
+  - id: one_or_two_digit_number
+    seq:
+      - ref: digit
+      - opt:
+          ref: digit
+        prefer: shift
+
+  - id: two_digit_number
+    seq:
+      - ref: digit
+      - ref: digit
+    # max: 2 # BUG: emits 1 digit
+  - id: three_digit_number
+    seq:
+      - ref: two_digit_number
+      - ref: digit
+
+  - id: two_or_three_digit_number
+    seq:
+      - ref: two_digit_number
+      - opt:
+          ref: digit
+        prefer: shift
+
+  - id: any_integer
+    ref: digit
+    min: 1
+
+  - id: fractional_part
+    seq:
+      - ref: dot
+      - opt:
+          ref: any_integer
+
+  - id: float_number
+    seq:
+      - ref: any_integer
+      - opt:
+          ref: fractional_part
+
+  - id: integrated_electronic_marker
+    seq:
+      - ref: Dash
+      - ref: I
+      - ref: E
+
+  - id: brushless_modifier_poles_torque_letter  # usually determines count of poles, A models have more poles (usually 10) than non-lettered models (usually 8), B models have more poles (usually 6) than non-lettered models, but some B models have no A analogues and have 8 poles and C models usually have no analogues and also have 8 poles. 
+    alt:
+      - ref: A
+      - ref: B
+
+  - id: three_phase_marker
+    seq:
+      - ref: Three
+      - ref: P
+
+  - id: hollow_specifier
+    seq:
+      - ref: Dash
+      - ref: H
+
+prods:
+  - id: main
+    seq:
+      - uncap:
+          opt:
+            ref: fl
+      - cap: size
+        ref: two_or_three_digit_number
+      - ref: type_specific
+        cap: typed
+
+  - spacer: 1
+
+  - id: gearbox_specifier
+    seq:
+      - uncap:
+          ref: G
+      - cap: ratio
+        ref: float_number
+
+  - id: type_specific
+    alt:
+      - cap: stepper
+        ref: stepper_t
+      - cap: permanent
+        ref: permanent_t
+      - cap: brushless
+        ref: brushless_t
+      - cap: three_phase
+        ref: three_phase_t
+
+  - id: three_phase_t
+    seq:
+      - cap: type_marker
+        ref: three_phase_marker
+      - cap: motor_body_length
+        ref: two_or_three_digit_number
+      - cap: suffix
+        ref: three_phase_suffix_opt_our
+
+  - id: three_phase_suffix_opt_our
+    opt:
+      ref: three_phase_suffix_t
+
+  - id: three_phase_suffix_t
+    seq:
+      - uncap:
+          ref: Dash
+      - cap: current_per_phase_over_ten
+        ref: two_digit_number
+      - cap: leads
+        ref: two_digit_number
+      - cap: shafts_count
+        ref: shafts_count_marker_opt_our
+
+  - id: stepper_suffix_t
+    seq:
+      - uncap:
+          ref: Dash
+      - cap: suffix_body
+        ref: suffix_with_or_without_tail
+
+  - id: suffix_with_or_without_tail
+    alt:
+      - cap: with_current
+        ref: suffix_with_current
+      - cap: without_current
+        ref: stepper_suffix_tail
+
+  - id: suffix_with_current
+    seq:
+      - cap: current
+        ref: three_digit_number
+      - cap: tail
+        ref: stepper_suffix_tail
+
+
+  - id: double_step_rate_marker
+    opt:
+      ref: M
+
+  - id: encoder_presence_marker
+    opt:
+      ref: E
+
+  - id: unknown_marker_F
+    opt:
+      ref: F
+
+  - id: keyway_marker
+    opt:
+      ref: K
+
+  - id: screwed_shaft_marker
+    opt:
+      ref: C
+
+  - id: gearbox_specifier_opt_our
+    opt:
+      ref: gearbox_specifier
+
+  - id: hollow_specifier_opt_our
+    opt:
+      ref: hollow_specifier
+
+  - id: shafts_count_marker_opt_our
+    opt:
+      ref: shafts_count_marker
+
+  - id: shafts_count_and_step_rate_any_order_1_t
+    seq:
+      - cap: shafts_count
+        ref: shafts_count_marker_opt_our
+      - ref: double_step_rate_marker
+        cap: step_rate
+
+  - id: shafts_count_and_step_rate_any_order_2_t
+    seq:
+      - ref: double_step_rate_marker
+        cap: step_rate
+      - cap: shafts_count
+        ref: shafts_count_marker_opt_our
+
+  - id: shafts_count_and_step_rate_any_order_t
+    alt:
+      - cap: shafts_count_and_step_rate_any_order_1
+        ref: shafts_count_and_step_rate_any_order_1_t
+      - cap: shafts_count_and_step_rate_any_order_2
+        ref: shafts_count_and_step_rate_any_order_2_t
+
+  - id: stepper_suffix_tail
+    seq:
+      - cap: variant  # usually determines rated voltage, resistance and phase current
+        # For some models determines input count!
+        ref: digit
+      - cap: shafts_count_and_step_rate_any_order
+        ref: shafts_count_and_step_rate_any_order_t
+      - ref: encoder_presence_marker
+        cap: encoder
+      - ref: unknown_marker_F
+        cap: unknown_F
+      - ref: keyway_marker
+        cap: key_way
+      - ref: screwed_shaft_marker
+        cap: screwed_shaft
+      - cap: gearbox
+        ref: gearbox_specifier_opt_our
+      - cap: hollow
+        ref: hollow_specifier_opt_our
+
+  - id: stepper_modifiers_opt_our
+    opt:
+      ref: stepper_modifiers_t
+
+
+  - id: stepper_t
+    seq:
+      - cap: type_marker
+        ref: stepper_marker
+      - cap: stepper_modifiers
+        ref: stepper_modifiers_opt_our
+      - cap: motor_body_length
+        ref: two_or_three_digit_number
+      - cap: suffix
+        ref: stepper_suffix_t
+
+  - id: stepper_series_opt_our
+    opt:
+      ref: stepper_series
+    prefer: shift
+
+  - id: stepper_marker
+    seq:
+      - uncap:
+          ref: S
+      - cap: series
+        ref: stepper_series_opt_our
+
+  - id: permanent_t
+    seq:
+      - cap: type_marker
+        ref: permanent_marker
+      - cap: motor_body_length
+        ref: two_digit_number
+      - cap: suffix
+        ref: stepper_suffix_t
+
+  - id: brushless_marker
+    seq:
+      - cap: is_price_performance
+        ref: price_performance_or_unknown_C_marker
+      - cap: is_round
+        ref: rounded_marker
+      - uncap:
+          ref: brushless_marker_base
+      - cap: is_flat
+        ref: brushless_flat_marker
+      - cap: is_square
+        ref: square_marker
+      - cap: is_unknown_C
+        ref: price_performance_or_unknown_C_marker
+
+  - id: execution_configuration_t
+    seq:
+      - uncap:
+          ref: Dash
+      - cap: number
+        ref: any_integer
+      - cap: unit
+        ref: electrical_unit
+
+  - id: brushless_modifier_variants
+    alt:
+      - cap: poles_torque
+        ref: brushless_modifier_poles_torque
+      - cap: length_electronics_electrics
+        ref: brushless_modifier_length_electronics_electrics
+
+  - id: brushless_modifier_poles_torque
+    seq:
+      - cap: poles_or_other
+        ref: brushless_modifier_poles_torque_letter
+      - cap: variant  # determines torque, sometimes it is arythm progression, but not always
+        ref: two_digit_number
+
+  - id: brushless_modifier_length_electronics_electrics
+    seq:
+      - cap: motor_body_length
+        ref: two_or_three_digit_number
+      - cap: tail
+        ref: brushless_tail_opt_our
+
+  - id: brushless_tail_opt_our
+    opt:
+      ref: brushless_tail
+
+  - id: brushless_t
+    seq:
+      - cap: type_marker
+        ref: brushless_marker
+      - cap: modifier
+        ref: brushless_modifier_variants
+
+  - id: brushless_tail
+    alt:
+      - cap: electronic
+        ref: brushless_electronic_tail
+      - cap: no_electronic
+        ref: execution_configuration_t
+
+  - id: execution_configuration_opt_our
+    opt:
+      ref: execution_configuration_t
+
+  - id: brushless_electronic_tail
+    seq:
+      - cap: has_electronics
+        ref: integrated_electronic_marker
+      - cap: cfg
+        ref: execution_configuration_opt_our
