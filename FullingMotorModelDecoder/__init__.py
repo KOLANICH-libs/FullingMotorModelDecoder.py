@@ -2,6 +2,8 @@ from pathlib import Path
 from warnings import warn
 import typing
 
+warn("We have moved from M$ GitHub to https://codeberg.org/KFmts/FullingMotorModelDecoder.py , read why on https://codeberg.org/KOLANICH/Fuck-GuanTEEnomo .")
+
 from UniGrammarRuntime.ParserBundle import ParserBundle
 
 _thisDir = Path(__file__).parent
